@@ -1,0 +1,61 @@
+I：
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        temp= ListNode(0)
+        flag = 0
+        res = temp
+        while l1 or l2:
+            res_val = 0
+            if l1:
+                res_val = l1.val
+                l1 = l1.next
+            if l2:
+                res_val += l2.val
+                l2 = l2.next
+            res_sum = (res_val+flag)%10
+            flag= int((res_val+flag)/10)
+            res.next = ListNode(res_sum)
+            res = res.next
+            if flag:
+                res.next = ListNode(1)
+        res = temp.next
+        del temp
+        return res
+II：用栈储存两个链表
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        stack1 = []
+        stack2 = []
+        stack3 = []
+        while l1:
+            stack1.append(l1.val)
+            l1 = l1.next
+        while l2:
+            stack2.append(l2.val)
+            l2 = l2.next
+        flag = 0
+        while stack1 or stack2:
+            temp = flag
+            if stack1:
+                temp += stack1.pop()
+            if stack2:
+                temp += stack2.pop()
+            if temp<10:
+                stack3.append(temp)
+                flag = 0
+            else:
+                stack3.append(temp-10)
+                flag = 1
+        if flag == 1:
+            stack3.append(1)
+        head = ListNode(None)
+        l = head
+        for i in stack3[::-1]:
+            node = ListNode(i)
+            l.next = node
+            l = l.next
+        return head.next
